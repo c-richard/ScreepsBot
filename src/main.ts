@@ -1,7 +1,9 @@
-console.log("setup");
+import spawn from "./spawn";
+
+console.log(".");
 
 const loop = () => {
-  console.log("loop");
+  Game.spawn = spawn;
 };
 
 export { loop };
