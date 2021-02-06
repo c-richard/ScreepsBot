@@ -3,6 +3,7 @@ interface Game {
   rail: any;
   setupRails: any;
   stop: any;
+  moveToStop: any;
 }
 
 interface Memory {
@@ -12,4 +13,8 @@ interface Memory {
   stops: {
     [stopName: string]: RoomPosition;
   };
+}
+
+interface CreepMemory {
+  path: RoomPosition[];
 }
