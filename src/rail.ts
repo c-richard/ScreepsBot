@@ -19,19 +19,32 @@ export const rail = (a: RoomPosition, b: RoomPosition) => {
   });
 };
 
+export const stop = (name: string, pos: RoomPosition) => {
+  Memory.stops[name] = pos;
+};
+
 export const setupRails = () => {
   Memory.rails = {};
+  Memory.stops = {};
 };
 
 export const drawRails = () => {
-  Object.entries(Memory.rails).map(([roomKey, rails]) => {
-    const roomVisual = new RoomVisual(roomKey);
+  Memory.rails &&
+    Object.entries(Memory.rails).map(([roomKey, rails]) => {
+      const roomVisual = new RoomVisual(roomKey);
 
-    rails.map((column, x) => {
-      column &&
-        column.map((isRail, y) => {
-          if (isRail) roomVisual.circle(x, y);
-        });
+      rails.map((column, x) => {
+        column &&
+          column.map((isRail, y) => {
+            if (isRail) roomVisual.circle(x, y);
+          });
+      });
     });
-  });
+
+  Memory.stops &&
+    Object.entries(Memory.stops).map(([stopKey, stop]) => {
+      const roomVisual = new RoomVisual(stop.roomName);
+      roomVisual.circle(stop, { fill: "red" });
+      roomVisual.text(stopKey, stop, { align: "left" });
+    });
 };
