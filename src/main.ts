@@ -6,6 +6,7 @@ import {
   stop,
   moveToStop,
   updateCreep,
+  assignLoop,
 } from "./rail";
 
 console.log(".");
@@ -16,6 +17,7 @@ const loop = () => {
   Game.rail = rail;
   Game.stop = stop;
   Game.moveToStop = moveToStop;
+  Game.assignLoop = assignLoop;
 
   drawRails();
 
