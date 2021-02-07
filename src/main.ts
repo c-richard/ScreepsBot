@@ -1,28 +1,15 @@
-import spawn from "./spawn";
-import {
-  rail,
-  setupRails,
-  drawRails,
-  stop,
-  moveToStop,
-  updateCreep,
-  assignLoop,
-} from "./rail";
-
-console.log(".");
+import "augments/room";
+import "augments/spawn";
+import "augments/creep";
 
 const loop = () => {
-  Game.spawn = spawn;
-  Game.setupRails = setupRails;
-  Game.rail = rail;
-  Game.stop = stop;
-  Game.moveToStop = moveToStop;
-  Game.assignLoop = assignLoop;
+  Object.values(Game.rooms).map((r) => {
+    r.visualise();
+  });
 
-  drawRails();
-
-  Object.entries(Game.creeps).map(([creepName, creep]) => {
-    updateCreep(creep);
+  Object.values(Game.creeps).map((c) => {
+    c.visualise();
+    c.update();
   });
 };
 
