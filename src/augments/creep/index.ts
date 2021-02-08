@@ -1,3 +1,5 @@
+import { getRole } from "../../roles";
+
 Creep.prototype.moveToFlag = function (flagName) {
   const creepPostiion = this.pos;
   const flagPosition = Game.flags[flagName].pos;
@@ -28,6 +30,15 @@ Creep.prototype.update = function () {
     if (hasMoved === OK) {
       this.memory.path.shift();
     }
+    return;
+  }
+
+  if (!this.memory.initialised) {
+    if (this.spawning) return;
+    getRole(this.memory.role).init(this);
+    this.memory.initialised = true;
+  } else {
+    getRole(this.memory.role).update(this);
   }
 };
 
@@ -38,15 +49,3 @@ Creep.prototype.visualise = function () {
     });
   }
 };
-
-Creep.prototype.init = function () {
-  this.memory.path = [];
-  this.memory.initialised = true;
-};
-
-// Initialisation
-Object.values(Game.creeps).forEach((creep) => {
-  if (!creep.memory.initialised) {
-    creep.init();
-  }
-});
