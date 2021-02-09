@@ -5,7 +5,6 @@ Spawn.prototype.spawnRole = function (name, role, options) {
     memory: {
       path: [],
       initialised: false,
-      role,
       roleMemory: getRole(role).getMemory(options),
     },
   });

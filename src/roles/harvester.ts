@@ -1,3 +1,12 @@
+export interface HarvesterMemory {
+  role: typeof Harvester.ROLE;
+  flag: string;
+}
+
+export interface HarvesterOptions {
+  flag: string;
+}
+
 class Harvester {
   static ROLE: "h" = "h";
 
@@ -9,8 +18,9 @@ class Harvester {
     return [MOVE, WORK, WORK];
   }
 
-  static getMemory(options: { flag: string }) {
+  static getMemory(options: HarvesterOptions): HarvesterMemory {
     return {
+      role: Harvester.ROLE,
       flag: options.flag,
     };
   }

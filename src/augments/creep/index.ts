@@ -35,10 +35,10 @@ Creep.prototype.update = function () {
 
   if (!this.memory.initialised) {
     if (this.spawning) return;
-    getRole(this.memory.role).init(this);
+    getRole(this.memory.roleMemory.role).init(this);
     this.memory.initialised = true;
   } else {
-    getRole(this.memory.role).update(this);
+    getRole(this.memory.roleMemory.role).update(this);
   }
 };
 
@@ -48,4 +48,11 @@ Creep.prototype.visualise = function () {
       this.room.visual.circle(p.x, p.y, { fill: "red" });
     });
   }
+};
+
+Creep.prototype.getMemory = function () {
+  return {
+    path: [],
+    initialised: false,
+  };
 };

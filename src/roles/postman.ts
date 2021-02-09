@@ -1,3 +1,12 @@
+export interface PostmanMemory {
+  role: typeof Postman.ROLE;
+  pickingUp: boolean;
+}
+
+export interface PostmanOptions {
+  capacity: number;
+}
+
 class Postman {
   static ROLE: "p" = "p";
 
@@ -9,8 +18,9 @@ class Postman {
     return [MOVE, CARRY, CARRY];
   }
 
-  static getMemory() {
+  static getMemory(options?: PostmanOptions): PostmanMemory {
     return {
+      role: Postman.ROLE,
       pickingUp: false,
     };
   }
