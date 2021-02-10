@@ -1,6 +1,6 @@
 import { getRole } from "../../roles";
 
-Spawn.prototype.spawnRole = function (name, role, options) {
+Spawn.prototype.spawnRole = function (name: string, role: any, options: any) {
   return this.spawnCreep(getRole(role).getBody(), name, {
     memory: {
       path: [],
