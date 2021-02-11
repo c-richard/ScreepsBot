@@ -1,29 +1,13 @@
-export interface PostmanMemory {
-  role: typeof Postman.ROLE;
-  pickingUp: boolean;
-}
-
-export interface PostmanOptions {
-  capacity: number;
-}
-
-class Postman {
-  static ROLE: "p" = "p";
-
-  static init() {}
-
-  static update(creep: Creep) {}
-
-  static getBody() {
-    return [MOVE, CARRY, CARRY];
-  }
-
-  static getMemory(options?: PostmanOptions): PostmanMemory {
-    return {
-      role: Postman.ROLE,
-      pickingUp: false,
-    };
-  }
-}
+const Postman = {
+  role: "p" as "p",
+  init: (creep: Creep) => {},
+  update: (creep: Creep) => {
+    creep.move(LEFT);
+  },
+  getBody: () => [MOVE, CARRY, CARRY],
+  getMemory: (options: {}) => ({
+    role: Postman.role,
+  }),
+};
 
 export default Postman;

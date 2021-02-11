@@ -1,14 +1,13 @@
-import Harvester, { HarvesterMemory } from "./harvester";
-import Postman, { PostmanMemory } from "./postman";
+import Harvester from "./harvester";
+import Postman from "./postman";
 
-export type RoleKey = typeof Harvester.ROLE | typeof Postman.ROLE;
-export type RoleMemory = HarvesterMemory | PostmanMemory;
+type RoleKey = typeof Postman.role | typeof Harvester.role;
 
-export function getRole(role: RoleKey) {
+export default function getRole(role: RoleKey) {
   switch (role) {
-    case Harvester.ROLE:
+    case Harvester.role:
       return Harvester;
-    case Postman.ROLE:
+    case Postman.role:
       return Postman;
   }
 }

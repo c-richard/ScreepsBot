@@ -1,4 +1,9 @@
-import { RoleMemory } from "roles";
+import Harvester from "../../roles/harvester";
+import Postman from "../../roles/postman";
+
+type RoleMemory =
+  | ReturnType<typeof Harvester.getMemory>
+  | ReturnType<typeof Postman.getMemory>;
 
 declare global {
   interface CreepMemory {

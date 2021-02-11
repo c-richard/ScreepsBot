@@ -1,4 +1,4 @@
-import { getRole } from "../../roles";
+import getRole from "../../roles";
 
 Creep.prototype.moveToFlag = function (flagName) {
   const creepPostiion = this.pos;
