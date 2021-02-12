@@ -1,8 +1,17 @@
 const Harvester = {
   role: "h" as "h",
-  init: (creep: Creep) => {},
+  init: (creep: Creep) => {
+    const harvesterMemory = creep.memory.roleMemory as FirstArgument<
+      typeof Harvester.getMemory
+    >;
+    creep.moveToFlag(harvesterMemory.flag);
+  },
   update: (creep: Creep) => {
-    creep.move(RIGHT);
+    const source = creep.pos.findClosestByRange(FIND_SOURCES);
+
+    if (source) {
+      creep.harvest(source);
+    }
   },
   getBody: () => [MOVE, WORK, WORK],
   getMemory: (options: { flag: string }) => ({
