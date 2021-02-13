@@ -2,24 +2,20 @@ const Postman = {
   role: "p" as "p",
   init: (creep: Creep) => {},
   deliver: (creep: Creep) => {
-    const closestStructureNeedingEnergy = creep.pos.findClosestByPath(
+    const closestStructureNeedingEnergy = creep.pos.findClosestAlongRoute(
       FIND_MY_STRUCTURES,
       {
         filter: (structure) => {
           switch (structure.structureType) {
             case STRUCTURE_SPAWN:
-              return structure.store.getCapacity(RESOURCE_ENERGY) > 0;
+              return structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
+            case STRUCTURE_EXTENSION:
+              return structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
             default:
               return false;
           }
         },
-        costCallback: function (roomName, costMatrix) {
-          for (let x = 0; x < 50; x++) {
-            for (let y = 0; y < 50; y++) {
-              costMatrix.set(x, y, creep.room.memory.paths[x][y]);
-            }
-          }
-        },
+        distanceTolerance: 1,
       }
     );
 
@@ -32,17 +28,11 @@ const Postman = {
     }
   },
   pickup: (creep: Creep) => {
-    const closestDroppedEnergy = creep.pos.findClosestByPath(
+    const closestDroppedEnergy = creep.pos.findClosestAlongRoute(
       FIND_DROPPED_RESOURCES,
       {
         filter: (resource) => resource.resourceType === RESOURCE_ENERGY,
-        costCallback: function (roomName, costMatrix) {
-          for (let x = 0; x < 50; x++) {
-            for (let y = 0; y < 50; y++) {
-              costMatrix.set(x, y, creep.room.memory.paths[x][y]);
-            }
-          }
-        },
+        distanceTolerance: 1,
       }
     );
 

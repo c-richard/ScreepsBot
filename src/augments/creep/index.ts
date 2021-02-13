@@ -10,6 +10,11 @@ Creep.prototype.moveByRoute = function (pos: RoomPosition, distance: number) {
       for (let x = 0; x < 50; x++) {
         for (let y = 0; y < 50; y++) {
           costs.set(x, y, this.room.memory.paths[x][y]);
+
+          // todo replace with better traffic handling
+          if (this.room.lookForAt(LOOK_CREEPS, x, y).length > 0) {
+            costs.set(x, y, 0xff);
+          }
         }
       }
 
@@ -18,14 +23,9 @@ Creep.prototype.moveByRoute = function (pos: RoomPosition, distance: number) {
   });
 
   if (result.incomplete) {
-    let toChopOff = 0;
-    let lastPath = result.path[result.path.length];
-    while (lastPath.inRangeTo(pos, distance)) {
-      toChopOff += 1;
-      lastPath = result.path[result.path.length - toChopOff];
-    }
-
-    this.memory.path = result.path.slice(0, -toChopOff);
+    this.memory.path = result.path.filter(
+      (p) => !pos.inRangeTo(p, distance - 1)
+    );
   } else {
     this.memory.path = result.path.slice(0, -distance);
   }
