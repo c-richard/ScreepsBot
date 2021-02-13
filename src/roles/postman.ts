@@ -2,53 +2,55 @@ const Postman = {
   role: "p" as "p",
   init: (creep: Creep) => {},
   deliver: (creep: Creep) => {
-    const closestFlagWithCapacity = creep.pos.findClosestByPath(
-      Object.values(Game.flags)
-        .filter((flag) => flag.hasEnergyCapacity())
-        .map((flag) => flag)
-    );
-
-    if (closestFlagWithCapacity) {
-      if (creep.pos.isNearTo(closestFlagWithCapacity.pos)) {
-        const structures = creep.pos.findInRange(FIND_MY_STRUCTURES, 1);
-
-        const structuresNeedingEnergy = structures.filter((structure) => {
+    const closestStructureNeedingEnergy = creep.pos.findClosestByPath(
+      FIND_MY_STRUCTURES,
+      {
+        filter: (structure) => {
           switch (structure.structureType) {
             case STRUCTURE_SPAWN:
               return structure.store.getCapacity(RESOURCE_ENERGY) > 0;
-            case STRUCTURE_CONTROLLER:
-              return true;
             default:
               return false;
           }
-        });
+        },
+        costCallback: function (roomName, costMatrix) {
+          for (let x = 0; x < 50; x++) {
+            for (let y = 0; y < 50; y++) {
+              costMatrix.set(x, y, creep.room.memory.paths[x][y]);
+            }
+          }
+        },
+      }
+    );
 
-        if (structuresNeedingEnergy.length > 0) {
-          creep.transfer(structuresNeedingEnergy[0], RESOURCE_ENERGY);
-        }
+    if (closestStructureNeedingEnergy) {
+      if (creep.pos.isNearTo(closestStructureNeedingEnergy.pos)) {
+        creep.transfer(closestStructureNeedingEnergy, RESOURCE_ENERGY);
       } else {
-        creep.moveToFlag(closestFlagWithCapacity.name);
+        creep.moveByRoute(closestStructureNeedingEnergy.pos, 1);
       }
     }
   },
   pickup: (creep: Creep) => {
-    const closestFlagWithEnergy = creep.pos.findClosestByPath(
-      Object.values(Game.flags)
-        .filter((flag) => flag.hasEnergy())
-        .map((flag) => flag)
+    const closestDroppedEnergy = creep.pos.findClosestByPath(
+      FIND_DROPPED_RESOURCES,
+      {
+        filter: (resource) => resource.resourceType === RESOURCE_ENERGY,
+        costCallback: function (roomName, costMatrix) {
+          for (let x = 0; x < 50; x++) {
+            for (let y = 0; y < 50; y++) {
+              costMatrix.set(x, y, creep.room.memory.paths[x][y]);
+            }
+          }
+        },
+      }
     );
 
-    if (closestFlagWithEnergy) {
-      if (creep.pos.isNearTo(closestFlagWithEnergy.pos)) {
-        const droppedEnergy = creep.pos
-          .findInRange(FIND_DROPPED_RESOURCES, 1)
-          .filter((resource) => resource.resourceType === RESOURCE_ENERGY);
-
-        if (droppedEnergy.length > 0) {
-          creep.pickup(droppedEnergy[0]);
-        }
+    if (closestDroppedEnergy) {
+      if (creep.pos.isNearTo(closestDroppedEnergy.pos)) {
+        creep.pickup(closestDroppedEnergy);
       } else {
-        creep.moveToFlag(closestFlagWithEnergy.name);
+        creep.moveByRoute(closestDroppedEnergy.pos, 1);
       }
     }
   },

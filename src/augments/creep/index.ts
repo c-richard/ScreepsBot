@@ -1,10 +1,9 @@
 import getRole from "../../roles";
 
-Creep.prototype.moveToFlag = function (flagName) {
+Creep.prototype.moveByRoute = function (pos: RoomPosition, distance: number) {
   const creepPostiion = this.pos;
-  const flagPosition = Game.flags[flagName].pos;
 
-  const result = PathFinder.search(creepPostiion, flagPosition, {
+  const result = PathFinder.search(creepPostiion, pos, {
     roomCallback: (_) => {
       const costs = new PathFinder.CostMatrix();
 
@@ -18,7 +17,18 @@ Creep.prototype.moveToFlag = function (flagName) {
     },
   });
 
-  this.memory.path = result.path;
+  if (result.incomplete) {
+    let toChopOff = 0;
+    let lastPath = result.path[result.path.length];
+    while (lastPath.inRangeTo(pos, distance)) {
+      toChopOff += 1;
+      lastPath = result.path[result.path.length - toChopOff];
+    }
+
+    this.memory.path = result.path.slice(0, -toChopOff);
+  } else {
+    this.memory.path = result.path.slice(0, -distance);
+  }
 };
 
 Creep.prototype.update = function () {

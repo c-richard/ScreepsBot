@@ -4,7 +4,7 @@ const Harvester = {
     const harvesterMemory = creep.memory.roleMemory as FirstArgument<
       typeof Harvester.getMemory
     >;
-    creep.moveToFlag(harvesterMemory.flag);
+    creep.moveByRoute(Game.flags[harvesterMemory.flag].pos, 1);
   },
   update: (creep: Creep) => {
     const source = creep.pos.findClosestByRange(FIND_SOURCES);

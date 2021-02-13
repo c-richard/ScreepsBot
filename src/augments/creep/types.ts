@@ -13,7 +13,7 @@ declare global {
   }
 
   interface Creep {
-    moveToFlag: (name: string) => void;
+    moveByRoute: (pos: RoomPosition, distance: number) => void;
     update: () => void;
     visualise: () => void;
     getMemory: () => void;
