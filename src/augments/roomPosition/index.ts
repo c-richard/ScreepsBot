@@ -4,7 +4,7 @@ RoomPosition.prototype.findClosestAlongRoute = function (type: any, opts: any) {
     costCallback: function (roomName, costMatrix) {
       for (let x = 0; x < 50; x++) {
         for (let y = 0; y < 50; y++) {
-          costMatrix.set(x, y, Game.rooms[roomName].memory.paths[x][y]);
+          costMatrix.set(x, y, Game.rooms[roomName].memory.costMatrix[x][y]);
         }
       }
 

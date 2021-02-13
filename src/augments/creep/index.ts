@@ -9,7 +9,7 @@ Creep.prototype.moveByRoute = function (pos: RoomPosition, distance: number) {
 
       for (let x = 0; x < 50; x++) {
         for (let y = 0; y < 50; y++) {
-          costs.set(x, y, this.room.memory.paths[x][y]);
+          costs.set(x, y, this.room.memory.costMatrix[x][y]);
 
           // todo replace with better traffic handling
           if (this.room.lookForAt(LOOK_CREEPS, x, y).length > 0) {
