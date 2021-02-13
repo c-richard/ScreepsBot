@@ -1,7 +1,6 @@
 import "augments/room";
 import "augments/spawn";
 import "augments/creep";
-import "augments/flag";
 import "augments/roomPosition";
 
 const loop = () => {
