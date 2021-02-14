@@ -1,34 +1,29 @@
 import getRole from "../../roles";
 
 Creep.prototype.moveByRoute = function (pos: RoomPosition, distance: number) {
-  const creepPostiion = this.pos;
-
-  const result = PathFinder.search(creepPostiion, pos, {
-    roomCallback: (_) => {
-      const costs = new PathFinder.CostMatrix();
-
-      for (let x = 0; x < 50; x++) {
-        for (let y = 0; y < 50; y++) {
-          costs.set(x, y, this.room.memory.costMatrix[x][y]);
-
-          // todo replace with better traffic handling
-          if (this.room.lookForAt(LOOK_CREEPS, x, y).length > 0) {
-            costs.set(x, y, 0xff);
-          }
-        }
-      }
-
-      return costs;
-    },
-  });
-
-  if (result.incomplete) {
-    this.memory.path = result.path.filter(
-      (p) => !pos.inRangeTo(p, distance - 1)
-    );
-  } else {
-    this.memory.path = result.path.slice(0, -distance);
-  }
+  // const creepPostiion = this.pos;
+  // const result = PathFinder.search(creepPostiion, pos, {
+  //   roomCallback: (_) => {
+  //     const costs = new PathFinder.CostMatrix();
+  //     for (let x = 0; x < 50; x++) {
+  //       for (let y = 0; y < 50; y++) {
+  //         costs.set(x, y, this.room.memory.costMatrix[x][y]);
+  //         // todo replace with better traffic handling
+  //         if (this.room.lookForAt(LOOK_CREEPS, x, y).length > 0) {
+  //           costs.set(x, y, 0xff);
+  //         }
+  //       }
+  //     }
+  //     return costs;
+  //   },
+  // });
+  // if (result.incomplete) {
+  //   this.memory.path = result.path.filter(
+  //     (p) => !pos.inRangeTo(p, distance - 1)
+  //   );
+  // } else {
+  //   this.memory.path = result.path.slice(0, -distance);
+  // }
 };
 
 Creep.prototype.update = function () {

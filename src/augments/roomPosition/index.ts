@@ -1,32 +1,108 @@
-RoomPosition.prototype.findClosestAlongRoute = function (type: any, opts: any) {
-  return this.findClosestByPath(type, {
-    ...opts,
-    costCallback: function (roomName, costMatrix) {
-      for (let x = 0; x < 50; x++) {
-        for (let y = 0; y < 50; y++) {
-          costMatrix.set(x, y, Game.rooms[roomName].memory.costMatrix[x][y]);
-        }
-      }
+import { Graph, Node, Dijkstra } from "dijkstra-pathfinder";
 
-      if (opts.distanceTolerance) {
-        let blurSteps = opts.distanceTolerance + 1;
+RoomPosition.prototype._graphFromNodes = function () {
+  const roomMemory = Game.rooms[this.roomName].memory;
+  const graph = new Graph();
+  const graphNodes: { [key: string]: Node } = {};
 
-        while (blurSteps > 0) {
-          blurSteps -= 1;
-          for (let x = 0; x < 50; x++) {
-            for (let y = 0; y < 50; y++) {
-              if (costMatrix.get(x, y) === 1) {
-                // blur the region
-                for (let bx = -1; bx <= 1; bx++) {
-                  for (let by = -1; by <= 1; by++) {
-                    costMatrix.set(bx, by, 1);
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
+  Object.entries(roomMemory.nodeById).forEach(([id, node]) => {
+    graphNodes[id] = new Node(id);
   });
+
+  Object.entries(roomMemory.nodeById).forEach(([id, node]) => {
+    node.adjacency.forEach((adjacencyId) => {
+      graph.addArc(
+        graphNodes[id],
+        graphNodes[adjacencyId],
+        node.paths[adjacencyId].length
+      );
+    });
+  });
+
+  return [graph, graphNodes];
+};
+
+RoomPosition.prototype._nodeIdPathToDirections = function (
+  nodeIdPath: string[]
+): DirectionConstant[] {
+  const directions: DirectionConstant[] = [];
+  for (let i = 0; i < nodeIdPath.length - 1; i++) {
+    const A = Game.rooms[this.roomName].memory.nodeById[nodeIdPath[i]];
+    const bId = Game.rooms[this.roomName].memory.nodeById[nodeIdPath[i + 1]].id;
+
+    A.paths[bId].forEach((d) => {
+      directions.push(d);
+    });
+  }
+
+  return directions;
+};
+
+RoomPosition.prototype.findPathToNode = function ([x, y]: Point) {
+  const [graph, graphNodes] = this._graphFromNodes();
+
+  // Find shortes path to point
+  const dijkstra = new Dijkstra(
+    graph,
+    graphNodes[Game.rooms[this.roomName].memory.idByPoint[this.x][this.y]]
+  );
+  dijkstra.calculate();
+  const pathToDestination = dijkstra.getPathTo(
+    graphNodes[Game.rooms[this.roomName].memory.idByPoint[x][y]]
+  );
+
+  if (pathToDestination != null) {
+    return this._nodeIdPathToDirections(
+      pathToDestination.map((node) => node.payload)
+    );
+  }
+
+  return null;
+};
+
+RoomPosition.prototype.findClosestNodeByPath = function (
+  type,
+  filter = () => true
+) {
+  const [graph, graphNodes] = this._graphFromNodes();
+
+  // calculate dijkstra from this point
+  const dijkstra = new Dijkstra(
+    graph,
+    graphNodes[Game.rooms[this.roomName].memory.idByPoint[this.x][this.y]]
+  );
+  dijkstra.calculate();
+
+  // get a list of nodes of type and valid wrt. filter
+  const validNodes = Object.entries(Game.rooms[this.roomName].memory.nodeById)
+    .filter(([_, node]) => node.actions.includes(type) && filter(node))
+    .map(([nodeId, _]) => nodeId);
+
+  if (validNodes.length > 0) {
+    // find shortest path amongst valid nodes
+    let shortestPath: string[] | null = null;
+    let closestNode: string | null = null;
+
+    validNodes.forEach((nodeId) => {
+      const path = dijkstra.getPathTo(graphNodes[nodeId]);
+      if (
+        path != null &&
+        (shortestPath == null || path.length < shortestPath.length)
+      ) {
+        shortestPath = path.map((p) => p.payload);
+        closestNode = nodeId;
+      }
+    });
+
+    if (shortestPath != null && closestNode != null) {
+      console.log("node", closestNode);
+      console.log("path", this._nodeIdPathToDirections(shortestPath));
+      return [
+        Game.rooms[this.roomName].memory.nodeById[closestNode].point,
+        this._nodeIdPathToDirections(shortestPath),
+      ];
+    }
+  }
+
+  return [null, null];
 };

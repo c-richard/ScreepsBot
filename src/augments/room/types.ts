@@ -6,7 +6,7 @@ export enum NodeType {
 }
 
 declare global {
-  interface Node {
+  interface RoomNode {
     id: string;
     adjacency: string[];
     paths: {
@@ -19,7 +19,7 @@ declare global {
   interface RoomMemory {
     initialised?: boolean;
     nodeById: {
-      [nodeId: string]: Node;
+      [nodeId: string]: RoomNode;
     };
     idByPoint: {
       [x: number]: {

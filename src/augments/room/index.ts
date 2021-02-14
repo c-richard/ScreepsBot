@@ -26,7 +26,7 @@ function delete2d(
 }
 
 Room.prototype.addNode = function (point: Point, actions: NodeType[]) {
-  const node: Node = {
+  const node: RoomNode = {
     id: `${point[0]}-${point[1]}`,
     adjacency: [],
     paths: {},
