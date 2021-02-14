@@ -7,13 +7,13 @@ type RoleMemory =
 
 declare global {
   interface CreepMemory {
-    path: RoomPosition[];
+    path: DirectionConstant[];
     initialised: boolean;
     roleMemory: RoleMemory;
   }
 
   interface Creep {
-    moveByRoute: (pos: RoomPosition, distance: number) => void;
+    setPath: (path: DirectionConstant[]) => void;
     update: () => void;
     visualise: () => void;
     getMemory: () => void;

@@ -1,10 +1,15 @@
 const Harvester = {
   role: "h" as "h",
   init: (creep: Creep) => {
-    const harvesterMemory = creep.memory.roleMemory as FirstArgument<
+    const harvesterMemory = creep.memory.roleMemory as ReturnType<
       typeof Harvester.getMemory
     >;
-    creep.moveByRoute(Game.flags[harvesterMemory.flag].pos, 1);
+
+    const path = creep.pos.findPathToNode(harvesterMemory.harvestPoint);
+
+    if (path) {
+      creep.setPath(path);
+    }
   },
   update: (creep: Creep) => {
     const source = creep.pos.findClosestByRange(FIND_SOURCES);
@@ -14,9 +19,9 @@ const Harvester = {
     }
   },
   getBody: () => [MOVE, WORK, WORK],
-  getMemory: (options: { flag: string }) => ({
+  getMemory: (options: { harvestPoint: Point }) => ({
     role: Harvester.role,
-    flag: options.flag,
+    harvestPoint: options.harvestPoint,
   }),
 };
 

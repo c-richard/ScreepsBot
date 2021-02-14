@@ -74,7 +74,9 @@ Room.prototype.addConnection = function ([x1, y1]: Point, [x2, y2]: Point) {
   aNode.paths[bId] = foundPath.map((pathStep) => pathStep.direction);
   bNode.paths[aId] = foundPath
     .reverse()
-    .map((pathStep) => ((pathStep.direction + 4) % 8) as DirectionConstant);
+    .map(
+      (pathStep) => (((pathStep.direction + 3) % 8) + 1) as DirectionConstant
+    );
 };
 
 Room.prototype.removeConnection = function ([x1, y1]: Point, [x2, y2]: Point) {
