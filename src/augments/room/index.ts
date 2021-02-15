@@ -32,6 +32,7 @@ Room.prototype.addNode = function (point: Point, actions: NodeType[]) {
     paths: {},
     point,
     actions,
+    occupiedBy: null,
   };
 
   this.memory.nodeById[node.id] = node;
@@ -138,6 +139,28 @@ Room.prototype.visualise = function () {
     const action = node.actions[actionIndex];
     this.visual.text(action, x, y);
   });
+};
+
+Room.prototype.findAdjacentNodes = function (
+  node: RoomNode,
+  filter: (node: RoomNode) => boolean
+): RoomNode[] {
+  const nodesAdjacent = Object.entries(node.paths)
+    .filter(([_, path]) => path.length === 1)
+    .map(([nodeId, _]) => nodeId);
+
+  const validAdjacentNode = nodesAdjacent.filter((nodeId) =>
+    filter(this.memory.nodeById[nodeId])
+  );
+
+  return validAdjacentNode.map((nodeId) => this.memory.nodeById[nodeId]);
+};
+
+Room.prototype.isNodeAdjacentTo = function (
+  node: RoomNode,
+  filter: (node: RoomNode) => boolean
+): boolean {
+  return this.findAdjacentNodes(node, filter).length > 0;
 };
 
 Room.prototype.init = function () {

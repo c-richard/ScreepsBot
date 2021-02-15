@@ -9,7 +9,7 @@ declare global {
     findClosestNodeByPath(
       type: NodeType,
       filter?: (node: RoomNode) => boolean
-    ): [Point, DirectionConstant[]] | [null, null];
+    ): [RoomNode, DirectionConstant[]] | [null, null];
   }
 }
 

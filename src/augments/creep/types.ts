@@ -10,6 +10,7 @@ declare global {
     path: DirectionConstant[];
     initialised: boolean;
     roleMemory: RoleMemory;
+    occupying: RoomNode | null;
   }
 
   interface Creep {

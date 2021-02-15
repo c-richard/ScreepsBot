@@ -5,6 +5,11 @@ const Harvester = {
       typeof Harvester.getMemory
     >;
 
+    const [x, y] = harvesterMemory.harvestPoint;
+    const nodeId = creep.room.memory.idByPoint[x][y];
+    creep.room.memory.nodeById[nodeId].occupiedBy = creep.name;
+    creep.memory.occupying = creep.room.memory.nodeById[nodeId];
+
     const path = creep.pos.findPathToNode(harvesterMemory.harvestPoint);
 
     if (path) {

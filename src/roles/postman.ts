@@ -1,6 +1,8 @@
+import { NodeType } from "augments/room/types";
+
 const Postman = {
   role: "p" as "p",
-  init: (creep: Creep) => {},
+  init: () => {},
   deliver: (creep: Creep) => {
     // const closestStructureNeedingEnergy = creep.pos.findClosestAlongRoute(
     //   FIND_MY_STRUCTURES,
@@ -27,20 +29,41 @@ const Postman = {
     // }
   },
   pickup: (creep: Creep) => {
-    // const closestDroppedEnergy = creep.pos.findClosestAlongRoute(
-    //   FIND_DROPPED_RESOURCES,
-    //   {
-    //     filter: (resource) => resource.resourceType === RESOURCE_ENERGY,
-    //     distanceTolerance: 1,
-    //   }
-    // );
-    // if (closestDroppedEnergy) {
-    //   if (creep.pos.isNearTo(closestDroppedEnergy.pos)) {
-    //     creep.pickup(closestDroppedEnergy);
-    //   } else {
-    //     creep.moveByRoute(closestDroppedEnergy.pos, 1);
-    //   }
-    // }
+    if (creep.memory.occupying == null) {
+      // find a new node to occupy
+      const [pickupNode, path] = creep.pos.findClosestNodeByPath(
+        NodeType.PICKUP,
+        (node) => {
+          if (node.occupiedBy != null) return false;
+
+          return creep.room.isNodeAdjacentTo(
+            node,
+            (adjNode) =>
+              adjNode.actions.includes(NodeType.HARVEST) &&
+              adjNode.occupiedBy != null
+          );
+        }
+      );
+
+      // assign and move towards
+      if (pickupNode && path) {
+        pickupNode.occupiedBy = creep.name;
+        creep.memory.occupying = pickupNode;
+        creep.setPath(path);
+      }
+
+      return;
+    }
+
+    // find the adjacent harvest node
+    const [x, y] = creep.room.findAdjacentNodes(
+      creep.memory.occupying,
+      (adjNode) =>
+        adjNode.actions.includes(NodeType.HARVEST) && adjNode.occupiedBy != null
+    )[0].point;
+
+    // pickup the dropped energy there
+    creep.pickup(creep.room.lookForAt(LOOK_ENERGY, x, y)[0]);
   },
   update: (creep: Creep) => {
     const postmanMemory = creep.memory.roleMemory as ReturnType<
@@ -49,8 +72,10 @@ const Postman = {
 
     if (postmanMemory.delivering) {
       Postman.deliver(creep);
+      // todo unoccupy delivery spot
     } else {
       Postman.pickup(creep);
+      // todo unoccupy pickup spot
     }
 
     if (creep.store.getFreeCapacity() === 0) {

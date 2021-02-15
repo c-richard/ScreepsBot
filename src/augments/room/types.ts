@@ -14,6 +14,7 @@ declare global {
     };
     point: Point;
     actions: NodeType[];
+    occupiedBy: string | null;
   }
 
   interface RoomMemory {
@@ -30,6 +31,14 @@ declare global {
 
   interface Room {
     addNode: (p: Point, actions: NodeType[]) => void;
+    findAdjacentNodes(
+      node: RoomNode,
+      filter: (node: RoomNode) => boolean
+    ): RoomNode[];
+    isNodeAdjacentTo(
+      node: RoomNode,
+      filter: (node: RoomNode) => boolean
+    ): boolean;
     removeNode: (p: Point) => void;
     addConnection: (p1: Point, p2: Point) => void;
     removeConnection: (p1: Point, p2: Point) => void;

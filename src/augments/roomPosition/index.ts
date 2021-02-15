@@ -96,7 +96,7 @@ RoomPosition.prototype.findClosestNodeByPath = function (
 
     if (shortestPath != null && closestNode != null) {
       return [
-        Game.rooms[this.roomName].memory.nodeById[closestNode].point,
+        Game.rooms[this.roomName].memory.nodeById[closestNode],
         this._nodeIdPathToDirections(shortestPath),
       ];
     }

@@ -30,5 +30,6 @@ Creep.prototype.getMemory = function () {
   return {
     path: [],
     initialised: false,
+    occupying: null,
   };
 };
