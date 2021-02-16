@@ -3,6 +3,7 @@ export enum NodeType {
   TRANSFER = "t",
   PICKUP = "p",
   HARVEST = "h",
+  WAYPOINT = "w",
 }
 
 declare global {
@@ -40,6 +41,8 @@ declare global {
       filter: (node: RoomNode) => boolean
     ): boolean;
     removeNode: (p: Point) => void;
+    assignNode: (p: Point, creep: Creep) => void;
+    unassignNode: (p: Point) => void;
     addConnection: (p1: Point, p2: Point) => void;
     removeConnection: (p1: Point, p2: Point) => void;
     visualise: () => void;

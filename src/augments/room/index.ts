@@ -169,9 +169,44 @@ Room.prototype.init = function () {
   this.memory.initialised = true;
 };
 
+Room.prototype.assignNode = function ([x, y]: Point, creep: Creep) {
+  const nodeId = creep.room.memory.idByPoint[x][y];
+  const node = this.memory.nodeById[nodeId];
+  node.occupiedBy = creep.name;
+  creep.memory.occupying = node;
+};
+
+Room.prototype.unassignNode = function ([x, y]: Point) {
+  const nodeId = this.memory.idByPoint[x][y];
+  const node = this.memory.nodeById[nodeId];
+
+  if (node.occupiedBy) {
+    const creep = Game.creeps[node.occupiedBy];
+    node.occupiedBy = null;
+    creep.memory.occupying = null;
+  }
+};
+
 // Initialisation
 Object.values(Game.rooms).forEach((room) => {
   if (!room.memory.initialised) {
     room.init();
+
+    room.addNode([10, 10], [NodeType.HARVEST]);
+    room.addNode([10, 9], [NodeType.PICKUP]);
+    room.addNode([10, 8], [NodeType.WAYPOINT]);
+    room.addConnection([10, 10], [10, 9]);
+    room.addConnection([10, 9], [10, 8]);
+
+    room.addNode([15, 10], [NodeType.HARVEST]);
+    room.addNode([15, 9], [NodeType.PICKUP]);
+    room.addNode([15, 8], [NodeType.WAYPOINT]);
+    room.addConnection([15, 10], [15, 9]);
+    room.addConnection([15, 9], [15, 8]);
+
+    room.addConnection([10, 8], [15, 8]);
+
+    room.addNode([8, 8], [NodeType.WAYPOINT]);
+    room.addConnection([8, 8], [10, 8]);
   }
 });

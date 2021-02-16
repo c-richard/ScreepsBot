@@ -48,7 +48,7 @@ const Postman = {
       // assign and move towards
       if (pickupNode && path) {
         pickupNode.occupiedBy = creep.name;
-        creep.memory.occupying = pickupNode;
+        creep.room.assignNode(pickupNode.point, creep);
         creep.setPath(path);
       }
 
@@ -72,18 +72,23 @@ const Postman = {
 
     if (postmanMemory.delivering) {
       Postman.deliver(creep);
-      // todo unoccupy delivery spot
     } else {
       Postman.pickup(creep);
-      // todo unoccupy pickup spot
     }
 
-    if (creep.store.getFreeCapacity() === 0) {
+    if (!postmanMemory.delivering && creep.store.getFreeCapacity() === 0) {
       postmanMemory.delivering = true;
+      if (creep.memory.occupying)
+        creep.room.unassignNode(creep.memory.occupying.point);
     }
 
-    if (creep.store.getFreeCapacity() === creep.store.getCapacity()) {
+    if (
+      postmanMemory.delivering &&
+      creep.store.getFreeCapacity() === creep.store.getCapacity()
+    ) {
       postmanMemory.delivering = false;
+      if (creep.memory.occupying)
+        creep.room.unassignNode(creep.memory.occupying.point);
     }
   },
   getBody: () => [MOVE, CARRY, CARRY],
