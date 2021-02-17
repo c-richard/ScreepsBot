@@ -4,7 +4,6 @@ import Postman from "../../roles/postman";
 declare global {
   interface StructureSpawn {
     spawnRole(
-      name: string,
       role: typeof Harvester.role,
       opt: FirstArgument<typeof Harvester.getMemory>
     ): void;
