@@ -16,6 +16,7 @@ declare global {
   interface Creep {
     setPath: (path: DirectionConstant[]) => void;
     update: () => void;
+    consumeStep: () => boolean;
     visualise: () => void;
     getMemory: () => void;
   }

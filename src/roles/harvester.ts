@@ -10,6 +10,7 @@ const Harvester = {
 
     if (path) {
       creep.setPath(path);
+      creep.consumeStep();
     }
   },
   update: (creep: Creep) => {

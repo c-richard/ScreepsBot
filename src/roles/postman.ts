@@ -50,6 +50,7 @@ const Postman = {
         pickupNode.occupiedBy = creep.name;
         creep.room.assignNode(pickupNode.point, creep);
         creep.setPath(path);
+        creep.consumeStep();
       }
 
       return;
