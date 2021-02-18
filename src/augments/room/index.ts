@@ -192,21 +192,8 @@ Object.values(Game.rooms).forEach((room) => {
   if (!room.memory.initialised) {
     room.init();
 
-    room.addNode([10, 10], [NodeType.HARVEST]);
-    room.addNode([10, 9], [NodeType.PICKUP]);
-    room.addNode([10, 8], [NodeType.WAYPOINT]);
-    room.addConnection([10, 10], [10, 9]);
-    room.addConnection([10, 9], [10, 8]);
-
-    room.addNode([15, 10], [NodeType.HARVEST]);
-    room.addNode([15, 9], [NodeType.PICKUP]);
-    room.addNode([15, 8], [NodeType.WAYPOINT]);
-    room.addConnection([15, 10], [15, 9]);
-    room.addConnection([15, 9], [15, 8]);
-
-    room.addConnection([10, 8], [15, 8]);
-
-    room.addNode([8, 8], [NodeType.WAYPOINT]);
-    room.addConnection([8, 8], [10, 8]);
+    room.addNode([22, 25], [NodeType.UPGRADE]);
+    room.addNode([21, 25], [NodeType.TRANSFER]);
+    room.addConnection([21, 25], [22, 25]);
   }
 });

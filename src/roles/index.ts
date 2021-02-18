@@ -1,7 +1,11 @@
 import Harvester from "./harvester";
 import Postman from "./postman";
+import Upgrader from "./upgrader";
 
-type RoleKey = typeof Postman.role | typeof Harvester.role;
+type RoleKey =
+  | typeof Postman.role
+  | typeof Harvester.role
+  | typeof Upgrader.role;
 
 export default function getRole(role: RoleKey) {
   switch (role) {
@@ -9,5 +13,7 @@ export default function getRole(role: RoleKey) {
       return Harvester;
     case Postman.role:
       return Postman;
+    case Upgrader.role:
+      return Upgrader;
   }
 }
