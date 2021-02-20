@@ -20,7 +20,7 @@ const Upgrader = {
       creep.upgradeController(controller);
     }
   },
-  getBody: () => [MOVE, WORK, WORK],
+  getBody: () => [MOVE, CARRY, WORK],
   getMemory: (options: { upgradePoint: Point }) => ({
     role: Upgrader.role,
     upgradePoint: options.upgradePoint,
