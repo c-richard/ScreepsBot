@@ -175,6 +175,8 @@ function update(creep: Creep) {
     postmanMemory.delivering = false;
     if (creep.memory.occupying)
       creep.room.unassignNode(creep.memory.occupying.point);
+
+    return;
   }
 
   // picking up -> delivering transition
@@ -185,6 +187,8 @@ function update(creep: Creep) {
     postmanMemory.delivering = true;
     if (creep.memory.occupying)
       creep.room.unassignNode(creep.memory.occupying.point);
+
+    return;
   }
 }
 
