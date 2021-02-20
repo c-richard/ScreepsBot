@@ -1,9 +1,6 @@
 import getRole from "../../roles";
 
-const generateName = (() => {
-  let i = 0;
-  return () => (++i).toString();
-})();
+const generateName = () => Math.floor(Math.random() * 9999).toString();
 
 Spawn.prototype.spawnRole = function (role: any, options?: any) {
   return this.spawnCreep(getRole(role).getBody(), generateName(), {
