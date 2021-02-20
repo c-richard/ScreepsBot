@@ -156,7 +156,7 @@ Room.prototype.findAdjacentNodes = function (
   return validAdjacentNode.map((nodeId) => this.memory.nodeById[nodeId]);
 };
 
-Room.prototype.isNodeAdjacentTo = function (
+Room.prototype.isNodeAdjacentToNode = function (
   node: RoomNode,
   filter: (node: RoomNode) => boolean
 ): boolean {
@@ -195,5 +195,16 @@ Object.values(Game.rooms).forEach((room) => {
     room.addNode([22, 25], [NodeType.UPGRADE]);
     room.addNode([21, 25], [NodeType.TRANSFER]);
     room.addConnection([21, 25], [22, 25]);
+
+    room.addNode([19, 25], [NodeType.WAYPOINT]);
+    room.addConnection([19, 25], [21, 25]);
+
+    room.addNode([21, 24], [NodeType.PICKUP]);
+    room.addNode([21, 23], [NodeType.HARVEST]);
+    room.addConnection([21, 23], [21, 24]);
+    room.addConnection([21, 24], [21, 25]);
+
+    room.addNode([21, 27], [NodeType.TRANSFER]);
+    room.addConnection([21, 27], [21, 25]);
   }
 });

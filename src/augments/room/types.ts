@@ -36,7 +36,7 @@ declare global {
       node: RoomNode,
       filter: (node: RoomNode) => boolean
     ): RoomNode[];
-    isNodeAdjacentTo(
+    isNodeAdjacentToNode(
       node: RoomNode,
       filter: (node: RoomNode) => boolean
     ): boolean;
