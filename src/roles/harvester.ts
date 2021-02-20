@@ -1,30 +1,41 @@
-const Harvester = {
-  role: "h" as "h",
-  init: (creep: Creep) => {
-    const harvesterMemory = creep.memory.roleMemory as ReturnType<
-      typeof Harvester.getMemory
-    >;
+export const HARVESTER_ROLE: "h" = "h";
 
-    creep.room.assignNode(harvesterMemory.harvestPoint, creep);
-    const path = creep.pos.findPathToNode(harvesterMemory.harvestPoint);
+export interface HarvesterMemory {
+  role: typeof HARVESTER_ROLE;
+  point: Point;
+}
 
-    if (path) {
-      creep.setPath(path);
-      creep.consumeStep();
-    }
-  },
-  update: (creep: Creep) => {
-    const source = creep.pos.findClosestByRange(FIND_SOURCES);
+export interface HarvesterOptions {
+  point: Point;
+}
 
-    if (source) {
-      creep.harvest(source);
-    }
-  },
+function init(creep: Creep) {
+  const harvesterMemory = creep.memory.roleMemory as HarvesterMemory;
+
+  creep.room.assignNode(harvesterMemory.point, creep);
+  const path = creep.pos.findPathToNode(harvesterMemory.point);
+
+  if (path) {
+    creep.setPath(path);
+    creep.consumeStep();
+  }
+}
+
+function update(creep: Creep) {
+  const source = creep.pos.findClosestByRange(FIND_SOURCES);
+
+  if (source) {
+    creep.harvest(source);
+  }
+}
+
+export default {
+  role: HARVESTER_ROLE,
+  init,
+  update,
   getBody: () => [MOVE, WORK, WORK],
-  getMemory: (options: { harvestPoint: Point }) => ({
-    role: Harvester.role,
-    harvestPoint: options.harvestPoint,
+  getMemory: (options: { point: Point }) => ({
+    role: HARVESTER_ROLE,
+    ...options,
   }),
 };
-
-export default Harvester;

@@ -1,18 +1,16 @@
-import Harvester from "../../roles/harvester";
-import Postman from "../../roles/postman";
-import Upgrader from "../../roles/upgrader";
+import { Harvester, Postman, Upgrader } from "../../roles";
 
 declare global {
   interface StructureSpawn {
     spawnRole(
-      role: typeof Harvester.role,
-      opt: FirstArgument<typeof Harvester.getMemory>
+      role: typeof Harvester.HARVESTER_ROLE,
+      opt: Harvester.HarvesterMemory
     ): void;
     spawnRole(
-      role: typeof Upgrader.role,
-      opt: FirstArgument<typeof Upgrader.getMemory>
+      role: typeof Upgrader.UPGRADE_ROLE,
+      opt: Upgrader.UpgraderMemory
     ): void;
-    spawnRole(name: string, role: typeof Postman.role): void;
+    spawnRole(name: string, role: typeof Postman.POSTMAN_ROLE): void;
   }
 }
 

@@ -1,11 +1,13 @@
 import { NodeType } from "augments/room/types";
 
-const POSTMAN_ROLE = "p";
+export const POSTMAN_ROLE: "p" = "p";
 
-interface PostmanMemory {
+export interface PostmanMemory {
   role: typeof POSTMAN_ROLE;
   delivering: boolean;
 }
+
+export interface PostmanOptions {}
 
 function moveToDeliveryPoint(creep: Creep): boolean {
   let [transferNode, path] = creep.pos.findClosestNodeByPath(
