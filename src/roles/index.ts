@@ -2,12 +2,17 @@ import HarvesterManager, * as Harvester from "./harvester";
 import PostmanManager, * as Postman from "./postman";
 import UpgraderManager, * as Upgrader from "./upgrader";
 
-type RoleKey =
+export type RoleKey =
   | typeof Harvester.HARVESTER_ROLE
   | typeof Postman.POSTMAN_ROLE
   | typeof Upgrader.UPGRADE_ROLE;
 
 export type RoleMemory =
+  | Harvester.HarvesterMemory
+  | Postman.PostmanMemory
+  | Upgrader.UpgraderMemory;
+
+export type RoleOptions =
   | Harvester.HarvesterMemory
   | Postman.PostmanMemory
   | Upgrader.UpgraderMemory;

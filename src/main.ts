@@ -18,9 +18,23 @@ function cleanupCreep(creepName: string) {
   delete Memory.creeps[creepName];
 }
 
+function cleanupSpawn(spawnName: string) {
+  // todo
+}
+
 const loop = () => {
   Object.values(Game.rooms).map((r) => {
     r.visualise();
+  });
+
+  Object.keys(Memory.spawns).map((spawnName) => {
+    const spawn = Game.spawns[spawnName];
+
+    if (spawn != null) {
+      spawn.update();
+    } else {
+      cleanupSpawn(spawnName);
+    }
   });
 
   Object.keys(Memory.creeps).map((creepName) => {
