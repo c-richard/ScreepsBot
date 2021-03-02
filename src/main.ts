@@ -2,6 +2,9 @@ import "augments/room";
 import "augments/spawn";
 import "augments/creep";
 import "augments/roomPosition";
+import { HARVESTER_ROLE } from "roles/harvester";
+import { UPGRADE_ROLE } from "roles/upgrader";
+import { POSTMAN_ROLE } from "roles/postman";
 
 function cleanupCreep(creepName: string) {
   const occupyingNodeId = Memory.creeps[creepName].occupying?.id;
@@ -14,7 +17,20 @@ function cleanupCreep(creepName: string) {
     });
   }
 
-  // clear memory;
+  const roleMemory = Memory.creeps[creepName].roleMemory;
+  switch (roleMemory.role) {
+    case HARVESTER_ROLE:
+      Game.spawns.Spawn1.queueSpawnRole(HARVESTER_ROLE, {
+        point: roleMemory.point,
+      });
+    case UPGRADE_ROLE:
+      Game.spawns.Spawn1.queueSpawnRole(UPGRADE_ROLE, {
+        point: roleMemory.point,
+      });
+    case POSTMAN_ROLE:
+      Game.spawns.Spawn1.queueSpawnRole(POSTMAN_ROLE);
+  }
+
   delete Memory.creeps[creepName];
 }
 
