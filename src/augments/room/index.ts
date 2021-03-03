@@ -94,6 +94,8 @@ Room.prototype.removeConnection = function ([x1, y1]: Point, [x2, y2]: Point) {
 };
 
 Room.prototype.visualise = function () {
+  if (!this.memory.initialised) return;
+
   Object.values(this.memory.nodeById).map((node) => {
     Object.values(node.paths).forEach((directions) => {
       let [x, y] = node.point;
@@ -186,25 +188,3 @@ Room.prototype.unassignNode = function ([x, y]: Point) {
     creep.memory.occupying = null;
   }
 };
-
-// Initialisation
-Object.values(Game.rooms).forEach((room) => {
-  if (!room.memory.initialised) {
-    room.init();
-
-    room.addNode([22, 25], [NodeType.UPGRADE]);
-    room.addNode([21, 25], [NodeType.TRANSFER]);
-    room.addConnection([21, 25], [22, 25]);
-
-    room.addNode([19, 25], [NodeType.WAYPOINT]);
-    room.addConnection([19, 25], [21, 25]);
-
-    room.addNode([21, 24], [NodeType.PICKUP]);
-    room.addNode([21, 23], [NodeType.HARVEST]);
-    room.addConnection([21, 23], [21, 24]);
-    room.addConnection([21, 24], [21, 25]);
-
-    room.addNode([21, 27], [NodeType.TRANSFER]);
-    room.addConnection([21, 27], [21, 25]);
-  }
-});

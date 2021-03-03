@@ -28,7 +28,7 @@ Spawn.prototype.update = function () {
         break;
     }
 
-    if (result === OK) this.memory.queue.pop();
+    if (result === OK) this.memory.queue.shift();
   }
 };
 

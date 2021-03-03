@@ -2,6 +2,8 @@ import "augments/room";
 import "augments/spawn";
 import "augments/creep";
 import "augments/roomPosition";
+import "augments/global/index";
+
 import { HARVESTER_ROLE } from "roles/harvester";
 import { UPGRADE_ROLE } from "roles/upgrader";
 import { POSTMAN_ROLE } from "roles/postman";
@@ -34,10 +36,6 @@ function cleanupCreep(creepName: string) {
   delete Memory.creeps[creepName];
 }
 
-function cleanupSpawn(spawnName: string) {
-  // todo
-}
-
 const loop = () => {
   Object.values(Game.rooms).map((r) => {
     r.visualise();
@@ -45,12 +43,7 @@ const loop = () => {
 
   Object.keys(Memory.spawns).map((spawnName) => {
     const spawn = Game.spawns[spawnName];
-
-    if (spawn != null) {
-      spawn.update();
-    } else {
-      cleanupSpawn(spawnName);
-    }
+    spawn.update();
   });
 
   Object.keys(Memory.creeps).map((creepName) => {
