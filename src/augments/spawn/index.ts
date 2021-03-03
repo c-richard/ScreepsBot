@@ -3,7 +3,15 @@ import { POSTMAN_ROLE } from "roles/postman";
 import { UPGRADE_ROLE } from "roles/upgrader";
 import getRole from "../../roles";
 
-const generateName = () => Math.floor(Math.random() * 9999).toString();
+function generateName() {
+  if (Memory.currentName == null) {
+    Memory.currentName = 0;
+  } else {
+    Memory.currentName += 1;
+  }
+
+  return `${Memory.currentName}`;
+}
 
 Spawn.prototype.init = function () {
   this.memory = {

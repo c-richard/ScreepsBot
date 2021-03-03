@@ -28,10 +28,12 @@ globalThis.begin = function () {
   // final highway connections
   room.addConnection([25, 19], [26, 24]);
   room.addConnection([26, 24], [33, 22]);
+  room.addConnection([25, 19], [33, 22]);
 
   spawn.init();
 
   spawn.queueSpawnRole("h", { point: [34, 21] });
+  spawn.queueSpawnRole("p");
   spawn.queueSpawnRole("p");
   spawn.queueSpawnRole("u", { point: [25, 18] });
 };
