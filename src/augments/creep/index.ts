@@ -6,12 +6,15 @@ Creep.prototype.setPath = function (path: DirectionConstant[]) {
 
 Creep.prototype.consumeStep = function () {
   if (this.memory.path.length > 0) {
-    const nextPath = this.memory.path[0];
-    const hasMoved = this.move(nextPath);
+    const [x, y] = this.memory.lastPos;
 
-    if (hasMoved === OK) {
+    if (this.pos.x !== x || this.pos.y !== y) {
+      this.memory.lastPos = [this.pos.x, this.pos.y];
       this.memory.path.shift();
     }
+
+    this.move(this.memory.path[0]);
+
     return true;
   }
 
@@ -19,23 +22,15 @@ Creep.prototype.consumeStep = function () {
 };
 
 Creep.prototype.update = function () {
-  if (this.consumeStep()) return;
-
   if (!this.memory.initialised) {
     if (this.spawning) return;
+    this.memory.lastPos = [this.pos.x, this.pos.y];
     getRole(this.memory.roleMemory.role).init(this);
     this.memory.initialised = true;
   } else {
+    if (this.consumeStep()) return;
     getRole(this.memory.roleMemory.role).update(this);
   }
 };
 
 Creep.prototype.visualise = function () {};
-
-Creep.prototype.getMemory = function () {
-  return {
-    path: [],
-    initialised: false,
-    occupying: null,
-  };
-};

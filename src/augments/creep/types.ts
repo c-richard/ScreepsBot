@@ -6,6 +6,7 @@ declare global {
     initialised: boolean;
     roleMemory: RoleMemory;
     occupying: RoomNode | null;
+    lastPos: Point;
   }
 
   interface Creep {
@@ -13,7 +14,6 @@ declare global {
     update: () => void;
     consumeStep: () => boolean;
     visualise: () => void;
-    getMemory: () => void;
   }
 }
 

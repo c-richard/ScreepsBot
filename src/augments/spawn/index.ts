@@ -43,6 +43,7 @@ Spawn.prototype.update = function () {
 Spawn.prototype.spawnRole = function (role: any, options?: any) {
   return this.spawnCreep(getRole(role).getBody(), generateName(), {
     memory: {
+      lastPos: [-1, -1],
       path: [],
       initialised: false,
       occupying: null,
